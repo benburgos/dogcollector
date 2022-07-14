@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,8 +11,13 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/style.css' %}"
+    />
   </head>
-  <body style="display: flex; min-height: 100vh; flex-direction: column">
+  <body>
     <header class="navbar-fixed">
       <nav>
         <div class="nav-wrapper">
@@ -25,13 +32,13 @@
         </div>
       </nav>
     </header>
-    <main class="container" style="flex: 1 0 auto;">
-        {% block content %} 
-        {% endblock %}
+    <main class="container">
+      {% block content %} 
+      {% endblock %}
     </main>
     <footer class="page-footer">
       <div class="footer-copyright">
-        <div class="container center">© 2014 Copyright Text</div>
+        <div class="container center">© 2022 Dog Collector</div>
       </div>
     </footer>
   </body>
