@@ -1,3 +1,6 @@
+<!-- You were last at this section! 
+https://seir-222-sasquatch.netlify.app/second-language/week-20/day-1/lecture-materials/django-urls-views-and-templates/#render-data-in-a-template:~:text=That%27s%20better!-,Render%20Data%20in%20a%20Template,-To%20see%20how -->
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -19,7 +22,7 @@
   </head>
   <body>
     <header class="navbar-fixed">
-      <nav>
+      <nav class="blue darken-4">
         <div class="nav-wrapper">
           <ul>
             <li>
@@ -28,6 +31,7 @@
           </ul>
           <ul class="right">
             <li><a href="/about">About</a></li>
+            <li><a href="/dogs">View All My Dogs</a></li>
           </ul>
         </div>
       </nav>
@@ -36,7 +40,7 @@
       {% block content %} 
       {% endblock %}
     </main>
-    <footer class="page-footer">
+    <footer class="page-footer blue darken-4">
       <div class="footer-copyright">
         <div class="container center">© 2022 Dog Collector</div>
       </div>
