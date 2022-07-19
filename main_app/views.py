@@ -2,8 +2,13 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Dog, FavoriteTreat
+from .models import Dog, FavoriteTreat, Photo
 from .forms import MealForm
+import boto3
+import uuid
+
+S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
+BUCKET = 'dogcollector-bb-88'
 
 
 def home(request):
@@ -21,13 +26,16 @@ def dogs_index(request):
 
 def dogs_detail(request, dog_id):
     dog = Dog.objects.get(id=dog_id)
-    treats_dog_doesnt_like = FavoriteTreat.objects.exclude(id__in = dog.treats.all().values_list('id'))
+    treats_dog_doesnt_like = FavoriteTreat.objects.exclude(
+        id__in=dog.treats.all().values_list('id'))
     meal_form = MealForm()
     return render(request, 'dogs/detail.html', {'dog': dog, 'meal_form': meal_form, 'treats': treats_dog_doesnt_like})
+
 
 def assoc_treat(request, dog_id, treat_id):
     Dog.objects.get(id=dog_id).treats.add(treat_id)
     return redirect('detail', dog_id=dog_id)
+
 
 def add_meal(request, dog_id):
     form = MealForm(request.POST)
@@ -38,9 +46,24 @@ def add_meal(request, dog_id):
     return redirect('detail', dog_id=dog_id)
 
 
+def add_photo(request, dog_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            photo = Photo(url=url, dog_id=dog_id)
+            photo.save()
+        except:
+            print('An error occurred while uploading the image!')
+    return redirect('detail', dog_id=dog_id)
+
+
 class DogCreate(CreateView):
     model = Dog
-    fields = '__all__'
+    fields = ['name', 'breed', 'description', 'age']
     success_url = '/dogs/'
 
 
