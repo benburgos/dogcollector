@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+
 {% block content %}
 
 <h1>Dog Details</h1>
@@ -11,9 +12,9 @@
         <p>Breed: {{ dog.breed }}</p>
         <p>Description: {{ dog.description }}</p>
         {% if dog.age > 0 %}
-          <p>Age: {{ dog.age }}</p>
+        <p>Age: {{ dog.age }}</p>
         {% else %}
-          <p>Age: Kitten</p>
+        <p>Age: Puppy</p>
         {% endif %}
       </div>
       <div class="card-action">
@@ -23,21 +24,30 @@
     </div>
   </div>
   <div class="col s6">
-    <form method="post">
-      {% csrf_token %}
+    <form method="post" action="{% url 'add_meal' dog.id %}">
+      {% csrf_token %} 
       {{ meal_form.as_p }}
-      <input type="submit" class="btn" value="Add Feeding">
+      <input type="submit" class="btn" value="Add Meal" />
     </form>
+    <br>
+    {% if dog.fed_for_today %}
+      <div class="card-panel teal-text center-align">{{dog.name}} has been fed all meals for today!</div>
+    {% else %}
+      <div class="card-panel red-text center-align">{{dog.name}} might be hungry..</div>
+    {% endif %}
     <table class="striped">
       <thead>
-        <tr><th>Date</th><th>Meal</th></tr>
+        <tr>
+          <th>Date</th>
+          <th>Meal</th>
+        </tr>
       </thead>
       <tbody>
-        {% for meal in dog.feeding_set.all %}
-          <tr>
-            <td>{{meal.date}}</td>
-            <td>{{meal.get_meal_display}}</td>
-          </tr>
+        {% for meal in dog.meal_set.all %}
+        <tr>
+          <td>{{meal.date}}</td>
+          <td>{{meal.get_meal_display}}</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
@@ -47,10 +57,10 @@
 <script>
   let dateEl = document.getElementById('id_date');
   M.Datepicker.init(dateEl, {
-    format: 'mm-dd-yyyy',
+    format: 'yyyy-mm-dd',
     defaultDate: new Date(),
     setDefaultDate: true,
-    autoClose: true
+    autoClose: true,
   });
 
   let selectEl = document.getElementById('id_meal');

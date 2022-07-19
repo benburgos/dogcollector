@@ -1,5 +1,4 @@
-from ast import Delete
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -24,6 +23,15 @@ def dogs_detail(request, dog_id):
     dog = Dog.objects.get(id=dog_id)
     meal_form = MealForm()
     return render(request, 'dogs/detail.html', {'dog': dog, 'meal_form': meal_form})
+
+
+def add_meal(request, dog_id):
+    form = MealForm(request.POST)
+    if form.is_valid():
+        new_feeding = form.save(commit=False)
+        new_feeding.dog_id = dog_id
+        new_feeding.save()
+    return redirect('detail', dog_id=dog_id)
 
 
 class DogCreate(CreateView):
