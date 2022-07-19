@@ -66,6 +66,9 @@ class DogCreate(CreateView):
     fields = ['name', 'breed', 'description', 'age']
     success_url = '/dogs/'
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class DogUpdate(UpdateView):
     model = Dog
