@@ -1,8 +1,9 @@
-from ast import Del, Delete
+from ast import Delete
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Dog
+from .models import Dog, FavoriteTreat
 
 
 def home(request):
@@ -33,6 +34,30 @@ class DogUpdate(UpdateView):
     model = Dog
     fields = ['breed', 'description', 'age']
 
+
 class DogDelete(DeleteView):
     model = Dog
     success_url = '/dogs/'
+
+
+class FavoriteTreatList(ListView):
+    model = FavoriteTreat
+
+
+class FavoriteTreatDetail(DetailView):
+    model = FavoriteTreat
+
+
+class FavoriteTreatCreate(CreateView):
+    model = FavoriteTreat
+    fields = '__all__'
+
+
+class FavoriteTreatUpdate(UpdateView):
+    model = FavoriteTreat
+    fields = ['name', 'flavor']
+
+
+class FavoriteTreatDelete(DeleteView):
+    model = FavoriteTreat
+    success_url = '/treats/'
