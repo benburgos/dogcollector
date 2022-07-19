@@ -53,7 +53,47 @@
     </table>
   </div>
 </div>
-
+<hr />
+<div class="row">
+	<div class="col s6">
+		<h3>{{ dog.name }}'s Favorite Treats</h3>
+    {% if dog.treats.count %}
+      {% for treat in dog.treats.all %}
+        <div class="card">
+			<div class="card-content">
+				<span class="card-title">
+					A <span>{{ treat.flavor }}</span> flavored {{ treat.name }}
+            </span>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>No Treats :(</h5>
+    {% endif %}
+  </div>
+  <div class="col s6">
+    <h3>Available Treats</h3>
+    {% if treats.count %}
+      {% for treat in treats.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              A <span>{{ treat.flavor }}</span> flavored {{ treat.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_treat' dog.id treat.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{dog.name}} seems to like all the available treats..</h5>
+    {% endif %}
+  </div>
+</div>
 <script>
   let dateEl = document.getElementById('id_date');
   M.Datepicker.init(dateEl, {

@@ -21,9 +21,13 @@ def dogs_index(request):
 
 def dogs_detail(request, dog_id):
     dog = Dog.objects.get(id=dog_id)
+    treats_dog_doesnt_like = FavoriteTreat.objects.exclude(id__in = dog.treats.all().values_list('id'))
     meal_form = MealForm()
-    return render(request, 'dogs/detail.html', {'dog': dog, 'meal_form': meal_form})
+    return render(request, 'dogs/detail.html', {'dog': dog, 'meal_form': meal_form, 'treats': treats_dog_doesnt_like})
 
+def assoc_treat(request, dog_id, treat_id):
+    Dog.objects.get(id=dog_id).treats.add(treat_id)
+    return redirect('detail', dog_id=dog_id)
 
 def add_meal(request, dog_id):
     form = MealForm(request.POST)
