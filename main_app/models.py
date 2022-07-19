@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from datetime import date
+from django.contrib.auth.models import User
 
 MEALS = (
     ('B', 'Breakfast'),
@@ -19,14 +20,16 @@ class FavoriteTreat(models.Model):
     def get_absolute_url(self):
         return reverse('treats_detail', kwargs={'pk': self.id})
 
-
+## THE NEXT SECTION IS HERE:
+# https://seir-222-sasquatch.netlify.app/second-language/week-21/day-3/lecture-materials/intro-to-django-authentication-and-authorization#update-the-cat-model:~:text=in%20Cat%20Collector.-,Update%20the%20CatModel,-Adding%20the%20relationship
+## AUTHENTICATION AND AUTHORIZATION
 class Dog(models.Model):
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
     age = models.IntegerField()
-    
     treats = models.ManyToManyField(FavoriteTreat)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
