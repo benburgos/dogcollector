@@ -17,4 +17,5 @@ urlpatterns = [
     path('treats/create/', views.FavoriteTreatCreate.as_view(), name='treats_create'),
     path('treats/<int:pk>/update/', views.FavoriteTreatUpdate.as_view(), name='treats_update'),
     path('treats/<int:pk>/delete/', views.FavoriteTreatDelete.as_view(), name='treats_delete'),
+    path('accounts/signup/', views.signup, name='signup'),
 ]
